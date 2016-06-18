@@ -57,7 +57,7 @@ def find_modules(attack):
 		with open(os.path.join(path,module)) as file:
 			for line in file.readlines():
 				if var_priority in line:
-					priorities.append([module.replace('.py',''),line[len(var_priority):].strip()]) # module list and its priorities. 
+					priorities.append([module.replace('.py',''),line[len(var_priority):].strip()]) # module list and its priorities.
 					break
 
 	priorities = sorted(priorities,key = lambda x: x[1]) # sort by priority (0 = high priority)
@@ -80,7 +80,7 @@ def banner():
 	global version
 	from pyfiglet import figlet_format
 	b = figlet_format("      CROZONO") + \
-	'''		Pro Version - {v}
+	'''		Community Version - {v}
 	www.crozono.com - info@crozono.com
 	'''.format(v=version)
 	print(b)
@@ -131,7 +131,7 @@ def main():
 
 		info("Target selected: " + settings.TARGET_ESSID)
 
-		if settings.TARGET_PRIVACY == 'WEP':			
+		if settings.TARGET_PRIVACY == 'WEP':
 			info("Cracking {e} access point with WEP privacy...".format(e=settings.TARGET_ESSID))
 			wep_modules = find_modules('wep')
 			for wep_module in wep_modules:
@@ -168,7 +168,7 @@ def main():
 							break
 					else:
 						pass
-			
+
 			if settings.TARGET_KEY is None:
 				if wps:
 					warn("PIN not found! :-( Running WPA/WPA2 attack modules...")
@@ -234,7 +234,7 @@ def main():
 			exit(1)
 	else:
 		warn("Attack not defined!")
-	
+
 	s.shutdown(1)
 
 	info("CROZONO has finished! Good bye! ;)")
