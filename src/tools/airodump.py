@@ -1,9 +1,18 @@
+#!/usr/bin/env python3
+"""
+--------------------------------------------------------------------------------
+	CROZONO - 22.02.16.20.00.00 - www.crozono.com - info@crozono.com
+
+	Tool - Airodump to scan targets :-)
+--------------------------------------------------------------------------------
+
+"""
 import os
 import csv
 import pexpect
-from poormanslogging import info, warn, error
-
 import src.settings as settings
+
+from poormanslogging import info, warn, error
 
 def scan_targets():
 	"""
@@ -17,17 +26,17 @@ def scan_targets():
 	"""
 	info("Scanning {t} seconds for target WiFi access points...".format(t=settings.AIRODUMP_SCAN_TIME))
 	#  Delete old files:
-	if os.path.exists(settings.OS_PATH + '/cr0z0n0-01.csv'):
-		os.remove(settings.OS_PATH + '/cr0z0n0-01.csv')
-		os.remove(settings.OS_PATH + '/cr0z0n0-01.cap')
-		os.remove(settings.OS_PATH + '/cr0z0n0-01.kismet.csv')
-		os.remove(settings.OS_PATH + '/cr0z0n0-01.kismet.netxml')
+	if os.path.exists(os.path.join(settings.OS_PATH,'cr0z0n0-01.csv')):
+		os.remove(os.path.join(settings.OS_PATH,'cr0z0n0-01.csv'))
+		os.remove(os.path.join(settings.OS_PATH,'cr0z0n0-01.cap'))
+		os.remove(os.path.join(settings.OS_PATH,'cr0z0n0-01.kismet.csv'))
+		os.remove(os.path.join(settings.OS_PATH,'cr0z0n0-01.kismet.netxml'))
 
 	cmd_airodump = pexpect.spawn('airodump-ng -w cr0z0n0 {i}'.format(i=settings.INTERFACE_MON))
 	cmd_airodump.expect([pexpect.TIMEOUT, pexpect.EOF], settings.AIRODUMP_SCAN_TIME)
 	cmd_airodump.close()
 
-	with open(settings.OS_PATH + '/cr0z0n0-01.csv', 'r') as f:
+	with open(os.path.join(settings.OS_PATH,'cr0z0n0-01.csv'), 'r') as f:
 		f.readline()  # skip empty line
 		header = list(f.readline().split(', '))
 		header = list(map(lambda x: x.replace('# ', '').strip(), header))  # cleanup
@@ -45,12 +54,19 @@ def scan_targets():
 			exit(1)
 		if settings.TARGET_ESSID is None:
 			for ap in aps:
-				if ap.get('ESSID').find('00') != -1:
+				if '00' in ap.get('ESSID'):
 					aps.remove(ap)
 			aps = sorted(aps, key=lambda x: x.get('Power'))
 			# From the top 2, get the one with most IV
 			return sorted(aps[:2], key=lambda x: x.get('IV'), reverse=True)[0]
 		else:
+			ap_defined = None
 			for ap in aps:
 				if ap.get('ESSID') == settings.TARGET_ESSID:
-					return ap
+					ap_defined = ap
+					break
+			if ap_defined is not None:
+				return ap_defined
+			else:
+				error("AP Target not found! Ending...")
+				exit(1)

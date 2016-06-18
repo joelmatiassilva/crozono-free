@@ -1,10 +1,20 @@
+#!/usr/bin/env python3
+"""
+--------------------------------------------------------------------------------
+	CROZONO - 22.02.16.20.00.00 - www.crozono.com - info@crozono.com
+
+	Utils - Functions for device management
+--------------------------------------------------------------------------------
+
+"""
 import time
 import random
 import subprocess
+import src.settings as settings
+
 from subprocess import Popen
 from poormanslogging import info, error
 
-import src.settings as settings
 
 def mac_changer():
 	if settings.NEW_MAC is None:
@@ -18,8 +28,6 @@ def mac_changer():
 	else:
 		pass
 
-	
-
 def check_interfering_processes(kill=True):
 	s = subprocess.Popen(['airmon-ng', 'check', 'kill' if kill else None], stdout=subprocess.DEVNULL)
 	_, err = s.communicate()
@@ -28,25 +36,21 @@ def check_interfering_processes(kill=True):
 		return False
 	return True
 
-
-
 def toggle_mode_monitor(setting=True):
 	if setting:
 		check_interfering_processes(kill=True)
 		subprocess.Popen(['airmon-ng', 'start', settings.INTERFACE], stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 
-		proc = Popen(['iwconfig'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)	
+		proc = Popen(['iwconfig'], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 		for line in proc.communicate()[0].decode().split('\n'):
 			if 'Mode:Monitor' in line:
 				settings.INTERFACE_MON = line.split()[0]
 				return True
 			else:
 				error("Could not set interface in monitor mode!")
-				exit()
+				exit(1)
 	else:
 		subprocess.call(['airmon-ng', 'stop', settings.INTERFACE_MON], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-		
-
 
 def get_ifaces():
 	"""Returns a list of interfaces (reported by airmon-ng) prefixed by the 'prefix' keyword"""

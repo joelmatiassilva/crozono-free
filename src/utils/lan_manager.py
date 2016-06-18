@@ -1,12 +1,21 @@
+#!/usr/bin/env python3
+"""
+--------------------------------------------------------------------------------
+	CROZONO - 22.02.16.20.00.00 - www.crozono.com - info@crozono.com
+
+	Utils - Functions for LAN management
+--------------------------------------------------------------------------------
+
+"""
 import os
 import time
-import pexpect
 import socket
+import pexpect
 import subprocess
-from poormanslogging import info, warn, error
-
-import src.utils.device_manager as device_mgr
 import src.settings as settings
+import src.utils.device_manager as device_mgr
+
+from poormanslogging import info, warn, error
 
 def get_gateway():
 	import struct
@@ -27,9 +36,9 @@ def save_key():
 	:param essid: Name of the ESSID for which the key was found
 	:param key: ESSID's key
 	"""
-	with open(settings.OS_PATH + '/passwords_cracked', 'a') as f:
+	pass_file = os.path.join(settings.OS_PATH,'passwords_cracked')
+	with open(pass_file, 'a') as f:
 		f.write("{t} - {e}: {k} \n".format(t=time.strftime('%H:%M:%S'), e=settings.TARGET_ESSID, k=settings.TARGET_KEY))
-
 
 def get_current_essid():
 	iwc = subprocess.Popen(['iwconfig', settings.INTERFACE], stdout=subprocess.PIPE)
@@ -62,7 +71,7 @@ def connect_to_lan():
 		cmd_connect.close()
 		parse_log_connect = open(settings.LOG_FILE, 'r')
 		for line in parse_log_connect:
-			if line.find('Error') != -1:
+			if 'Error' in line:
 				wpa_supplicant = open('/etc/wpa_supplicant/wpa_supplicant.conf', 'w')
 				wpa_supplicant.write('ctrl_interface=/var/run/wpa_supplicant\n')
 				wpa_supplicant.write('network={\n')
