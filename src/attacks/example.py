@@ -3,14 +3,14 @@
 --------------------------------------------------------------------------------
 	CROZONO - 18.06.16.20.00.00 - www.crozono.com - info@crozono.com
 
-	Discovery attack implementation guideline
+	Attack implementation guideline
 --------------------------------------------------------------------------------
 
 """
 
 from src.attacks.base_attack import BaseAttack
 
-class example_discovery(BaseAttack):
+class example(BaseAttack):
 
 	def __init__(self):
 		pass
