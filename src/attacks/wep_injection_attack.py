@@ -16,7 +16,7 @@ import subprocess
 import src.settings as settings
 
 from subprocess import Popen
-from poormanslogging import info, error
+from poormanslogging import info, error, warn
 from src.attacks.base_attack import BaseAttack
 
 class wep_injection(BaseAttack):
