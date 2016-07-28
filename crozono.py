@@ -24,7 +24,7 @@ from os import listdir
 from poormanslogging import info, warn, error
 
 # ## CONTEXT VARIABLES ##
-version = '1.2'
+version = '1.3'
 
 def import_module(module):
 	p = re.compile('class (.+)\({}\):'.format('BaseAttack'))
@@ -147,7 +147,7 @@ def main():
 				else:
 					pass
 			if settings.TARGET_KEY is None:
-					error("Key not found! :(")
+					error("Key not found! :-(")
 					exit(0)
 
 		elif settings.TARGET_PRIVACY == 'WPA' or settings.TARGET_PRIVACY == 'WPA2' or settings.TARGET_PRIVACY == 'WPA2 WPA':
@@ -185,7 +185,7 @@ def main():
 						pass
 
 			if settings.TARGET_KEY is None: # still...
-				error("Key not found! :(")
+				error("Key not found! :-(")
 				exit(0)
 			else:
 				lan_mgr.save_key()
