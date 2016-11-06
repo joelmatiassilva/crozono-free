@@ -79,6 +79,6 @@ class wpa_dictionary(BaseAttack):
 		deps = ["aircrack-ng","pyrit"]
 		for d in deps:
 			if subprocess.call(["which", d],stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) != 0:
-				error("Required binary for {bin} not found.".format(bin=dep))
+				error("Required binary for {bin} not found.".format(bin=d))
 				return False
 		return True
