@@ -46,9 +46,9 @@ def toggle_mode_monitor(setting=True):
 			if 'Mode:Monitor' in line:
 				settings.INTERFACE_MON = line.split()[0]
 				return True
-			else:
-				error("Could not set interface in monitor mode!")
-				exit(1)
+
+		error("Could not set interface in monitor mode!")
+		exit(1)
 	else:
 		subprocess.call(['airmon-ng', 'stop', settings.INTERFACE_MON], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
